@@ -1,6 +1,5 @@
 % OKSat Link Budget Analysis — UHF Downlink & Uplink
 % Hardware: GomSpace AX100U transceiver + ANT430 antenna
-% Reference: AX100 DS1013823 v3.7; ANT430 DS1010590 v3.5; wire_comm.pdf
 
 clear; clc; close all;
 
