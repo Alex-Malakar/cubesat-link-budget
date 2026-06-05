@@ -1,10 +1,11 @@
+# cubesat-link-budget
 # CubeSat Link Budget Analysis
-> **Note:** This project was built for personal learning after completing the OKSat 3U CubeSat 
-> senior design project at Oklahoma State University (Spring 2026). The hardware parameters 
-> reflect the OKSat mission but the methodology applies to any UHF LEO CubeSat link budget. 
+> **Note:** This project was built for personal learning after completing the OKSat 3U CubeSat
+> senior design project at Oklahoma State University (Spring 2026). The hardware parameters
+> reflect the OKSat mission but the methodology applies to any UHF LEO CubeSat link budget.
 > Not actively maintained — use freely.
 
-MATLAB script for UHF downlink and uplink link budget analysis of the OKSat 3U CubeSat. Computes Eb/No vs elevation angle and evaluates link closure across all GMAT contact windows.
+MATLAB script for UHF downlink and uplink link budget analysis of a 3U CubeSat in LEO. Computes Eb/No vs elevation angle and evaluates link closure across all GMAT contact windows.
 
 ---
 
@@ -15,6 +16,29 @@ MATLAB script for UHF downlink and uplink link budget analysis of the OKSat 3U C
 | Transceiver | GomSpace NanoCom AX100U | 1 W Tx, 19.2 kbps max, GMSK, UHF 430–440 MHz |
 | Satellite Antenna | GomSpace NanoCom ANT430 | −0.3 to 1.6 dBi, omnidirectional, circularly polarized |
 | Ground Station Antenna | 450CP42 Yagi | ~17.7 dBi, circularly polarized |
+
+---
+
+## Antenna Radiation Patterns
+
+### GomSpace NanoCom ANT430 — Satellite
+Canted turnstile antenna mounted on the −Z face. Nearly omnidirectional with no blind spots.
+Peak gain 1.4 dBi along Z-axis, minimum −1.0 dBi. | ANT430 DS §2.2.3
+
+![ANT430 3D Radiation Pattern](PASTE_ANT430_3D_URL_HERE)
+
+### M2 450CP42 Yagi — Ground Station
+21-element Yagi at 435–455 MHz. Highly directional at ~17.7 dBi — tracks the satellite across the pass.
+
+![Yagi Radiation Pattern](PASTE_YAGI_URL_HERE)
+
+---
+
+## Link Budget Results
+
+Both UHF downlink and uplink close comfortably above the 7.8 dB Eb/No threshold at all elevations above the 10° mask. Downlink is the constraining direction at ~7 dB margin; uplink has ~29 dB margin due to the higher ground station transmit power and lower satellite receiver noise temperature.
+
+![Eb/No vs Elevation](PASTE_EBNO_URL_HERE)
 
 ---
 
@@ -39,11 +63,11 @@ Both files are exported directly from GMAT. The ephemeris epoch is **22 Jul 2014
 
 ## Link Budget Model
 
-### Downlink (satellite to ground)
+### Downlink (satellite → ground)
 
 $$E_b/N_0 = P_{tx} + G_{tx} - L_{tx} - \text{FSPL} - L_{atm} - L_{ion} - L_{pol} - L_{misc} + G_{rx} - L_{rx} - 10\log_{10}(R) - 10\log_{10}(k_B T_{sys})$$
 
-### Uplink (ground to satellite)
+### Uplink (ground → satellite)
 
 Same equation with ground station and satellite roles swapped.
 
@@ -68,11 +92,11 @@ Same equation with ground station and satellite roles swapped.
 
 $$L_{atm} = \frac{0.04}{\sin(e)}, \quad \text{clamped to } [0.04,\ 0.23] \text{ dB}$$
 
-Where 0.04 dB is the zenith water vapor absorption at 435 MHz (SMAD Fig. 13-10). The `1/sin(e)` factor accounts for the longer atmospheric path length at low elevation angles. Clamped at 0.23 dB (corresponding to the 10 degree mask) because the flat-slab model breaks down below ~10 degree.
+Where 0.04 dB is the zenith water vapor absorption at 435 MHz (SMAD Fig. 13-10). The `1/sin(e)` factor accounts for the longer atmospheric path length at low elevation angles.
 
 ### Free-Space Path Loss
 
-$$\text{FSPL} = 20\log\!\left(\frac{4\pi r}{\lambda}\right)$$
+$$\text{FSPL} = 20\log_{10}\!\left(\frac{4\pi r}{\lambda}\right)$$
 
 Slant range $r$ is computed from ECEF positions in the GMAT ephemeris. For the analytic elevation sweep, slant range is derived from spherical Earth geometry at 650 km altitude.
 
@@ -86,7 +110,7 @@ Slant range $r$ is computed from ECEF positions in the GMAT ephemeris. For the a
 - Per-pass table: start time, stop time, duration, min Eb/No, max elevation, link margin
 
 **Figure 1 — Eb/No vs Elevation**
-Analytic sweep from 10 to 90 degree for both UHF downlink (red) and uplink (blue dashed).
+Analytic sweep from 10° to 90° for both UHF downlink (red) and uplink (blue dashed). Shows shaded margin bands and annotates margin at the 10° elevation mask.
 
 **Figure 2 — Eb/No over GMAT Passes**
 Downlink Eb/No at each GMAT timestep, with contact windows shaded. Confirms link closure across all 6 passes on 22 Jul 2014.
@@ -109,12 +133,12 @@ The large uplink margin is expected: the ground station transmits 25× more powe
 
 ## Assumptions & Limitations
 
-- Polarization loss is fixed at 3 dB. The ANT430 is mounted in the −Z (anti-velocity) direction, meaning the minimum boresight error to the ground station is always 90°. Actual Faraday rotation and elevation-dependent polarization are not modeled.
-- Ground station noise temperature (900 K) is an assumed value for a rural environment. The AX100 datasheet reference budget uses 10,035 K for a noisy city. This assumption should be validated against the Stillwater ground station once hardware is available.
-- Satellite Tx line loss (0.5 dB) is adopted from the GomSpace AX100 reference budget for a similar satellite and has not been measured on OKSat hardware.
+- Polarization loss is fixed at 3 dB. The ANT430 is mounted in the −Z direction, meaning the minimum boresight error to the ground station is always 90°. Actual Faraday rotation and elevation-dependent polarization are not modeled.
+- Ground station noise temperature (900 K) is an assumed value for a rural environment. The AX100 datasheet reference budget uses 10,035 K for a noisy city.
+- Satellite Tx line loss (0.5 dB) is adopted from the GomSpace AX100 reference budget and has not been measured on physical hardware.
 - Ionospheric loss (1.0 dB) is a fixed conservative estimate. Actual loss varies with TEC, time of day, and solar activity.
 - Free-space path loss uses the Friis transmission equation with no multipath, scattering, or atmospheric refraction.
-- GMAT ephemeris covers only ~1 day (22 Jul 2014). Results are representative of a single day and do not account for beta angle variation over the 5-year mission lifetime.
+- GMAT ephemeris covers only ~1 day (22 Jul 2014). Results are representative of a single day and do not account for beta angle variation over a multi-year mission.
 
 ---
 
