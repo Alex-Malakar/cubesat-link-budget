@@ -25,20 +25,19 @@ MATLAB script for UHF downlink and uplink link budget analysis of a 3U CubeSat i
 Canted turnstile antenna mounted on the −Z face. Nearly omnidirectional with no blind spots.
 Peak gain 1.4 dBi along Z-axis, minimum −1.0 dBi. | ANT430 DS §2.2.3
 
-![ANT430 3D Radiation Pattern](PASTE_ANT430_3D_URL_HERE)
+<img width="573" height="466" alt="Image" src="https://github.com/user-attachments/assets/9219e688-947b-45cd-8c0b-8bec2a0c08cd" />
 
 ### M2 450CP42 Yagi — Ground Station
 21-element Yagi at 435–455 MHz. Highly directional at ~17.7 dBi — tracks the satellite across the pass.
 
-![Yagi Radiation Pattern](PASTE_YAGI_URL_HERE)
-
+<img width="794" height="607" alt="Image" src="https://github.com/user-attachments/assets/c3d16342-a212-40a8-9355-3bd777b926fa" />
 ---
 
 ## Link Budget Results
 
 Both UHF downlink and uplink close comfortably above the 7.8 dB Eb/No threshold at all elevations above the 10° mask. Downlink is the constraining direction at ~7 dB margin; uplink has ~29 dB margin due to the higher ground station transmit power and lower satellite receiver noise temperature.
 
-![Eb/No vs Elevation](PASTE_EBNO_URL_HERE)
+<img width="1024" height="756" alt="Image" src="https://github.com/user-attachments/assets/1ed178cd-283c-4d86-a847-263260a3f629" />
 
 ---
 
