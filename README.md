@@ -62,11 +62,11 @@ Both files are exported directly from GMAT. The ephemeris epoch is **22 Jul 2014
 
 ## Link Budget Model
 
-### Downlink (satellite → ground)
+### Downlink (satellite to ground)
 
 $$E_b/N_0 = P_{tx} + G_{tx} - L_{tx} - \text{FSPL} - L_{atm} - L_{ion} - L_{pol} - L_{misc} + G_{rx} - L_{rx} - 10\log_{10}(R) - 10\log_{10}(k_B T_{sys})$$
 
-### Uplink (ground → satellite)
+### Uplink (ground to satellite)
 
 Same equation with ground station and satellite roles swapped.
 
@@ -109,7 +109,7 @@ Slant range $r$ is computed from ECEF positions in the GMAT ephemeris. For the a
 - Per-pass table: start time, stop time, duration, min Eb/No, max elevation, link margin
 
 **Figure 1 — Eb/No vs Elevation**
-Analytic sweep from 10° to 90° for both UHF downlink (red) and uplink (blue dashed). Shows shaded margin bands and annotates margin at the 10° elevation mask.
+Analytic sweep from 10 to 90 degree for both UHF downlink (red) and uplink (blue dashed). Shows shaded margin bands and annotates margin at the 10 degree elevation mask.
 
 **Figure 2 — Eb/No over GMAT Passes**
 Downlink Eb/No at each GMAT timestep, with contact windows shaded. Confirms link closure across all 6 passes on 22 Jul 2014.
@@ -121,7 +121,7 @@ Ground station elevation angle and slant range vs elapsed time, with contact win
 
 ## Key Results
 
-The downlink is the constraining direction. At 10° minimum elevation:
+The downlink is the constraining direction. At 10 degree minimum elevation:
 
 - **UHF Downlink margin: ~7 dB** above the 7.8 dB threshold
 - **UHF Uplink margin: ~29 dB** above threshold — not the limiting link
@@ -132,7 +132,7 @@ The large uplink margin is expected: the ground station transmits 25× more powe
 
 ## Assumptions & Limitations
 
-- Polarization loss is fixed at 3 dB. The ANT430 is mounted in the −Z direction, meaning the minimum boresight error to the ground station is always 90°. Actual Faraday rotation and elevation-dependent polarization are not modeled.
+- Polarization loss is fixed at 3 dB. The ANT430 is mounted in the −Z direction, meaning the minimum boresight error to the ground station is always 90 degree. Actual Faraday rotation and elevation-dependent polarization are not modeled.
 - Ground station noise temperature (900 K) is an assumed value for a rural environment. The AX100 datasheet reference budget uses 10,035 K for a noisy city.
 - Satellite Tx line loss (0.5 dB) is adopted from the GomSpace AX100 reference budget and has not been measured on physical hardware.
 - Ionospheric loss (1.0 dB) is a fixed conservative estimate. Actual loss varies with TEC, time of day, and solar activity.
